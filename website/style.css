@@ -9,7 +9,9 @@ body{
     /*Setting of the background colour as well as the margin and font colour*/
     background-color:  #333333;
     margin: 0;
-    color: black;
+    color: #F2E8CF;
+    text-align: center;
+
 }
 /*banner*/
 .banner{
@@ -21,17 +23,22 @@ body{
     border-color: #F2E8CF;
     border-width: 1px;
     margin:auto;
+    position: sticky;
+
 }
 .banner h1{
-    width: 10%;
-    position: relative;
+    width: 5%;
+    position: left;
     text-align: left;
     padding-left: 1%;
     display: table-cell;
     color: #F2E8CF;
     font-size: 250%;
     font-family: 'caveat', cursive;
-    cursor: pointer;
+    cursor: pointer;    
+
+
+
 }
 .navbar{
     width: 85%;
@@ -48,8 +55,9 @@ body{
 .navbar ul li{
     list-style: none;
     display: inline-block;
-    margin: 0 10px;
-    position: relative;
+    margin: 5px;
+    position: end;
+
 }
 .navbar ul li a{
     text-decoration: none;
@@ -72,7 +80,7 @@ body{
 .navbar ul li:hover::after{
     width: 100%;
 
-    background-color: navy;
+    background-color: #F2E8CF;
     position: sticky;
 
 
@@ -80,18 +88,35 @@ body{
 
 @keyframes blinking {
     0% {
-      background-color: #A7C957;
+      background-color: #333333;;
   
     }
     100% {
-      background-color: black;
+      background-color: #F2E8CF;
   
     }
   }
   #blink {
       margin: auto;
 
-      width: clamp(38rem, 10vw, 50rem);
-      height: clamp(0.5em, 0.5vw, 2rem);
+      width: clamp(12rem, 30vw, 20rem);
+      height: clamp(0.2em, 0.3vw, 0.4rem);
       animation: blinking 2s infinite;
+}
+/*title*/
+.content h1{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    margin-top: 5vh;
+    position: relative;
+    display: inline-flex;
+    width: max-content;
+    letter-spacing: 2px;
+
+}
+.subtitle{
+    font-size: clamp(1rem, 1.4vw, 3rem);
+    opacity: 75;
+    transform: translateY(3rem);
+
 }
