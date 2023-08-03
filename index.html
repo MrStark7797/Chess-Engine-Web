@@ -10,24 +10,24 @@
         <meta name="veiewport" content="width=device-width, inital-scale=1">
 
         <link
-            href="LMfavicon-32x32.png"
+            href="WebSite_Source\Images\LMfavicon-32x32.png"
             rel="icon"
             type="image/png"
             sizes="32x32"
             media="(prefers-color-scheme: light)"
         />
         <link
-            href="DMfavicon-32x32.png"
+            href="WebSite_Source\Images\DMfavicon-32x32.png"
             rel="icon"
             type="image/png"
             sizes="32x32"
             media="(prefers-color-scheme: dark)"
         />
 
-        <link rel="stylesheet" href="style.css"/>
+        <link rel="stylesheet" href="WebSite_Source/style.css"/>
         <link href="https://fonts.googleapis.com/css2?family=Caveat&family=IBM+Plex+Mono&family=Jost:wght@300&display=swap" rel="stylesheet">
 
-        <script src="webjs.js" type="module"></script>
+        <script src="/WebSite_Source/webjs.js" type="module"></script>
     </head>
 
     <!--prevents right click menu opening when the button is pressed to mark a tile-->
@@ -41,26 +41,63 @@
             
                 <ul>
                     
-                    <li><a href="tactics.html">Tactics</a></li>
-                    <li><a href="Analysis.html">Analysis</a></li>
-                    <li><a href="Play.html">Play</a></li>
+                    <li><a href="WebSite_Source/tactics.html">Tactics</a></li>
+                    <li><a href="WebSite_Source/Analysis.html">Analysis</a></li>
+                    <li><a href="WebSite_Source/Play.html">Play</a></li>
                     <li><a href="https://github.com/MrStark7797/Chess-Engine">Github Code</a></li>
                 </ul>
             </div>
         </div>
-        <div class="hero-image">
-            <div class="hero-text">
-                <h1>Slice Chess</h1>
+        <section class="hero">
+
+            <div class="hero-content">
+            
+                <h1 class="hero-title">
+                    Slice Chess
+                </h1>
                 <div id="blink"></div>
-                <p class="subtitle">
-                    Slice Chess is a free and open source Chess Analysis tool built to improve beginers and advanced players alike.<br> Currently Slice is being developed for a Computer Science NEA<br> All info is found on the github page<br>
-                </p>
-
-
-
+                <h2 class="hero-subtitle">
+                    Slice Chess is  a free, open source, chess learning and analysis program<br>which is backed by a high rating chess Engine,<br>in order to help improve users understanding and knowledge about the game of chess.  <br>
+                </h2>
+                 
+                <button type="button" class="hero-button" onclick="location.href='WebSite_Source/Analysis.html'">
+                    Begin Your Analysis &raquo;
+                </button>
+                <button type="button" class="hero-button" onclick="location.href='WebSite_Source/Play.html'">
+                    Play Me &raquo;
+                </button>
+                <button type="button" class="hero-button" onclick="location.href='WebSite_Source/tactics.html'">
+                    Learn Tactics! &raquo;
+                </button>
             </div>
             
-        </div>
         
+        </section>
+
+        <div class="content">
+            <h1> Why Chess?</h1>
+            <div id="blink"></div>
+            <p class="subtitle">
+                Over 2023 chess experienced an explosive growth<br>One of the most popular websites, chess.com, had 1,057,320,754 games played in February alone<br>due to many factors including:<br>Hanns vs Magnus: pro chess cheating scandal,<br>Lionel Messi vs Cristiano Ronaldo Chess game posted on twitter.<br>Causing Lots of new young players to leak onto the scene.<br>  
+            </p>
+
+        </div>
+        <section class="hero2">
+
+            <div class="hero-content">
+            
+                <h1 class="hero-title">
+                    The Developer
+                </h1>
+                <div id="blink"></div>
+                <h2 class="hero-subtitle">
+                    Currently Slice is being developed for a Computer Science NEA<br>By MrStark7797, an A-Level Student<br> All info is found on the github page<br>
+                </h2>
+                <button type="button" class="hero-button" onclick="location.href='https://www.github.com/MrStark7797/Chess-Engine'">
+                    Github &raquo;
+                </button>
+            </div>
+        </section>
+    
     </body>
 </html>
