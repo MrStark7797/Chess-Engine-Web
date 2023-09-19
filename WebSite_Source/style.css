@@ -58,8 +58,18 @@ body{
     list-style: none;
     display: inline-block;
     margin: 5px;
-    position: end;
+    position: relative;
 
+}
+.navbar ul li:hover{
+
+    height: 1px;
+
+    background: #F2E8CF;
+    
+    border-bottom: 1px solid #F2E8CF;
+
+    transition: 0.5s;
 }
 .navbar ul li a{
     text-decoration: none;
@@ -68,6 +78,7 @@ body{
 }
 .navbar ul li a:hover{
     color: #BC4749;
+    
 }
 .navbar ul li::after{
     content: '';
@@ -220,12 +231,12 @@ body {
 .hero3 {
     position: relative;
     width: 100%;
-    height: 102%;
+    height: 130%;
 
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 2.5rem;
+    margin-bottom: 5rem;
 }
 .hero3::before {
     content: "";
@@ -233,14 +244,14 @@ body {
     top: 0;
     left: 0;
     width: 100%;
-    height: 110%;
+    height: 130%;
     background: url(Images/CaroKhan.jpg);
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center center;
     border-top: 2px solid #F2E8CF;
     border-bottom: 2px solid #F2E8CF;
-    margin: 1rem 0px 2.5rem 0px;
+    margin: 0rem 0px 2.5rem 0px;
 
 
     filter: brightness(60%);
@@ -252,6 +263,7 @@ body {
     font-family:'Lucida Sans',  sans-serif;
 }
 .accordion .label::before {
+    margin-top: 100%;
     content: '+';
     color: #F2E8CF;
     position: absolute;
