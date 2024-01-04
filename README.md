@@ -3,6 +3,7 @@ A chess Engine for C++
 
 For A level NEA
 
+Plans on removing Maksym Korzh work for a personal writen UCI code using node.js
 # Thanks
 
 2021 Maksym Korzh - Python and slapping the chess stuff together
