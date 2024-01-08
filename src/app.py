@@ -16,65 +16,18 @@ from flask import Response
 from flask_pymongo import PyMongo
 from datetime import datetime
 import json
+import asyncio
+
+
 
 # create web app instance
 app = Flask(__name__)
 
-# probe book move
-def probe_book(pgn):
-    # open book file
-    with open('./Engine/book.txt') as f:
-        # read book games
-        book = f.read()
-
-        # init board        
-        board = chess.Board()
-        
-        # define response moves
-        response_moves = []
-
-        # loop over book lines
-        for line in book.split('\n')[0:-1]:
-            # define variation
-            variation = []
-            
-            # loop over line moves
-            for move in line.split():
-                variation.append(chess.Move.from_uci(move))
-            
-            # parse variation to SAN
-            san = board.variation_san(variation)
-            
-            # match book line line
-            if pgn in san:
-                try:
-                    # black move
-                    if san.split(pgn)[-1].split()[0][0].isdigit():
-                        response_moves.append(san.split(pgn)[-1].split()[1])
-                    
-                    # white move
-                    else:
-                        response_moves.append(san.split(pgn)[-1].split()[0])
-                
-                except:
-                    pass
-            
-            # engine makes first move
-            if pgn == '':
-                response_moves.append(san.split('1. ')[-1].split()[0])
-
-        # return random response move
-        if len(response_moves):
-            print('BOOK MOVE:', random.choice(response_moves))
-            return random.choice(response_moves)
-        
-        else:
-            return 0
-
 # root(index) route
 @app.route('/')
 def root():
-    return render_template('bbc.html')
+    return render_template('Analysis.html')
+
 
 # make move API
 @app.route('/make_move', methods=['POST'])
@@ -83,11 +36,12 @@ def make_move():
     pgn = request.form.get('pgn')
     
     # probe opening book
-    #if probe_book(pgn):
-    #    return {
-    #        'score': 'book move',
-    #        'best_move': probe_book(pgn)
-    #    }
+    """   if probe_book(pgn):
+        return {
+            'score': 'book move',
+            'best_move': probe_book(pgn)
+        } 
+    """
 
     # read game moves from PGN
     game = chess.pgn.read_game(io.StringIO(pgn))    

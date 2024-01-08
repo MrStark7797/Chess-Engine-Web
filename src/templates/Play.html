@@ -10,39 +10,39 @@
         <meta name="veiewport" content="width=device-width, inital-scale=1">
 
         <link
-            href="Images\LMfavicon-32x32.png"
+            href="static\img/LMfavicon-32x32.png"
             rel="icon"
             type="image/png"
             sizes="32x32"
             media="(prefers-color-scheme: light)"
         />
         <link
-            href="Images\DMfavicon-32x32.png"
+            href="static\img/DMfavicon-32x32.png"
             rel="icon"
             type="image/png"
             sizes="32x32"
             media="(prefers-color-scheme: dark)"
         />
 
-        <link rel="stylesheet" href="style.css"/>
+        <link rel="stylesheet" href="/static/css/style.css"/>
         <link href="https://fonts.googleapis.com/css2?family=Caveat&family=IBM+Plex+Mono&family=Jost:wght@300&display=swap" rel="stylesheet">
 
-        <script src="webjs.js" type="module"></script>
+        <script src="/static/js/webjs.js" type="module"></script>
 
         <!-- JQuery -->
         <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     
         <!-- Bootstrap -->
-        <link rel="stylesheet" href="./CSS/bootstrap.min.css">
+        <link rel="stylesheet" href="/static/css/bootstrap.min.css">
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
     
         <!-- chessjs -->
-        <script src="./JS/chess.js"></script>
+        <script src="/static/js/chess.js"></script>
     
         <!-- chessboardjs -->
-        <link rel="stylesheet" href="./CSS/chessboard-1.0.0.min.css">
-        <script src="./JS/chessboard-1.0.0.min.js"></script>
+        <link rel="stylesheet" href="/static/css/chessboard-1.0.0.min.css">
+        <script src="/static/js/chessboard-1.0.0.min.js"></script>
     
         <!-- Analytics -->
         <script type="text/javascript">
@@ -63,7 +63,7 @@
             <div class="navbar">
                 
 
-                <a href="../index.html"><h1><img src="Images\LogoVector.svg" alt="Slice Chess Logo" style="float:left;width:6rem;height:6rem;">Slice Chess</h1></a>
+                <a href="index.html"><h1><img src="static\img/LogoVector.svg" alt="Slice Chess Logo" style="float:left;width:6rem;height:6rem;">Slice Chess</h1></a>
                 
             
                 <ul>
@@ -144,14 +144,18 @@
                       <div class="col ml-4">
                         <!-- engine info -->
                         <div class="row mx-auto">    
-                          <div class="col"><img src="Images\LogoVector.svg" width="64" height="64" ></img></div>
+                          
                           <div class="col-8">  
+                            
                             <p class="lead font-weight-normal mt-3">
+                            <img src="static\img/LogoVector.svg" width="64" height="64"></img>
                             <strong>Slice V1.0</strong>
+                            
                             <br>
                             UCI chess engine by William Starkie
+                            
                             </p>
-                            <small>Logo by Brendan J. Norman</small>
+                            
                           </div>
                         </div>
                         
@@ -159,10 +163,10 @@
                         
                         <!-- info -->
                         <div class="row mx-auto mt-2">
-                          <small class="mx-auto">
+                          <!-- <small class="mx-auto">
                             NOTE: Online version has strength limitations due to poor performace of free hosting.<br>
                             Please make sure to <a href="https://github.com/maksimKorzh/bbc/releases/tag/1.4">download UCI version of BBC chess engine</a> to get the most of it!
-                          </small>
+                          </small> -->
                         </div>
                         
                         <!-- game info -->

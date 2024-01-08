@@ -155,7 +155,7 @@ body {
     left: 0;
     width: 100%;
     height: 102%;
-    background: url(Images/Chess-Hero-Banner.png);
+    background: url(..\img/Chess-Hero-Banner.png);
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center center;
@@ -218,7 +218,7 @@ body {
     left: 0;
     width: 100%;
     height: 102%;
-    background: url(Images/bincode.jpg);
+    background: url(..\img/bincode.jpg);
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center center;
@@ -245,7 +245,7 @@ body {
     left: 0;
     width: 100%;
     height: 130%;
-    background: url(Images/CaroKhan.jpg);
+    background: url(..\img/CaroKhan.jpg);
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center center;
@@ -327,4 +327,17 @@ body {
     margin-right: auto;
     font-size: clamp(0.5rem, 2vw, 1rem);
     font-family:'Lucida Sans',  sans-serif;
+}
+
+#ScoreBar{
+    width: 400px;
+    height: 20px;
+    background-color: white;
+    position: absolute;
+    transform: translateY(20%);
+}
+#ScoreSlider{
+    width: 50%;
+    height: 100%;
+    background-color: black;
 }
