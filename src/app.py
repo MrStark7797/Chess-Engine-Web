@@ -17,6 +17,7 @@ from flask_pymongo import PyMongo
 from datetime import datetime
 import json
 import asyncio
+import re
 
 
 engine = chess.engine.SimpleEngine.popen_uci('./engine/slice.exe')
@@ -34,18 +35,53 @@ def make_move():
     fen = request.form.get('fen')
 
     # init python chess board instance
+    analysboard = chess.Board(fen)
     board = chess.Board(fen)
-    
     # search for best move
-    result = engine.play(board, chess.engine.Limit(depth=6))
     
+
+    result = engine.play(board, chess.engine.Limit(depth=6))
+
+
+    
+
+    info = engine.analyse(analysboard, chess.engine.Limit(depth=6))
     # update internal python chess board state
     board.push(result.move)
     
     # extract FEN from current board state
     fen = board.fen()
+    old_score = str(info['score'])
     
-    return {'fen': fen}
+
+    score = re.sub('[PovScore(Cp(), BLACK) WHITE]', '', old_score)
+    
+    print(score)
+    try:
+            score = -int(str(score)) / 100
+        
+    except:
+        score = str(score) + 'Centi-Pawns'
+        if '+' in score:
+                score = score.replace('+', '-')
+            
+        elif '-' in score:
+            score = score.replace('-', '+')
+         
+
+    
+    return {
+        'fen': fen,
+        'best_move': str(result.move),
+        'score': score,
+
+        'nodes': info['nodes'],
+        'time': info['time']
+    }
+    
+@app.route('/play')
+def analytics():
+    return render_template('Play.html')
 
 # main driver
 if __name__ == '__main__':
