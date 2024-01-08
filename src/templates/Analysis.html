@@ -98,34 +98,14 @@
     
                         <!-- strength controls -->
                         <div class="input-group mb-3">
-                          <select id="move_time" class="form-control mr-2">
-                            <option value="0">N/A</option>
-                            <option value="instant" selected>Instant response</option>
-                            <option value="1">1 sec</option>
-                            <option value="2">2 sec</option>
-                            <option value="3">3 sec</option>
-                            <option value="4">4 sec</option>
-                            <option value="5">5 sec</option>
-                            <option value="6">6 sec</option>
-                            <option value="7">7 sec</option>
-                            <option value="8">8 sec</option>
-                            <option value="9">9 sec</option>
-                            <option value="10">10 sec</option>
-                          </select>
+                          
                           <select id="fixed_depth" class="form-control ml-2">
-                            <option value="0">N/A</option>
-                            <option value="1">1 ply</option>
-                            <option value="2">2 ply</option>
-                            <option value="3">3 ply</option>
-                            <option value="4">4 ply</option>
-                            <option value="5">5 ply</option>
+                            
+                            
                             <option value="6">6 ply</option>
                             <option value="7">7 ply</option>
                             <option value="8">8 ply</option>
-                            <option value="9">9 ply</option>
-                            <option value="10">10 ply</option>
-                            <option value="11">11 ply</option>
-                            <option value="12">12 ply</option>
+                            
                           </select>
                         </div>
     
@@ -203,15 +183,160 @@
     </body>
 </html>
 <script>
-  // NOTE: this example uses the chess.js library:
-  // https://github.com/jhlywa/chess.js
+  // make computer move
+  function make_move() {
+    // disable take back button
+    $('#take_back').attr('disabled', true);
+    
+    // make HTTP POST request to make move API
+    $.post('/make_move',{
+        'pgn': game.pgn(),
+        'fixed_depth': $('#fixed_depth option:selected').val(),
+        'move_time': $('#move_time option:selected').val() 
+      }, function(data) {
+        // load fen into the current board state
+        game.move(data.best_move, { sloppy: true })
+        
+        // update board position
+        board.position(game.fen());
 
-  var board = null
-  var game = new Chess()
-  var $status = $('#status')
-  var $fen = $('#fen')
-  var $pgn = $('#pgn')
+        // update game info
+        $score.text(data.score);
+        $depth.text(data.depth);
+        $time.text(data.time);
+        $nodes.text(data.nodes);
+        $knps.text(Math.round(Number($nodes.text()) / parseFloat($time.text())) / 1000)
 
+        // update game status
+        updateStatus();
+        
+        // re-enable take back button
+        $('#take_back').attr('disabled', false);
+    });
+  }
+
+  // handle new game button click
+  $('#new_game').on('click', function() {
+    // reset board state
+    game.reset();
+    
+    // set initial board position
+    board.position('start');
+  });
+  
+  // handle make move button click
+  $('#make_move').on('click', function() {
+    // make computer move
+    make_move();
+  });
+  
+  // handle take back button click
+  $('#take_back').on('click', function() {
+    // take move back
+    game.undo();
+    game.undo();
+    
+    // update board position
+    board.position(game.fen());
+    
+    // update game status
+    updateStatus();
+  });
+  
+  // handle flip board button click
+  $('#flip_board').on('click', function() {
+    // flip board
+    board.flip();
+    
+  });
+  
+  // handle select move time option
+  $('#move_time').on('change', function() {
+    // disable fixed depth
+    $('#fixed_depth').val('0');
+  });
+  
+  // handle select fixed depth option
+  $('#fixed_depth').on('change', function() {
+    // disable fixed depth
+    $('#move_time').val('0');
+  });
+  
+  // handle set FEN button click
+  $('#set_fen').on('click', function() {
+    // set user FEN
+    
+    // FEN parsed
+    if (game.load($('#fen').val()))
+      // set board position
+      board.position(game.fen());
+    
+    // FEN is not parsed
+    else
+      alert('Illegal FEN!');
+  });
+  
+  // handle download button click
+  $('#download_button').on('click', function() {
+    // init date
+    var date = new Date();
+    
+    // PGN header
+    var pgn_header = '';
+    
+    // get user name
+    var user_name = prompt('What is your name?');
+    
+    // get user color
+    var user_color = prompt('What color did you play with? (please type "White" or "Black")');
+    
+    // if user color is white
+    if (user_color == 'White')
+    {
+      // init PGN header
+      pgn_header = '[White "' + user_name + '"]\n[Black "BBC 1.2"]\n\n';
+      
+      // init PGN filename
+      $('#download_link').attr('download', user_name + '_vs_BBC_' + date.toString().replace(/\s/g, "_") + '.pgn');
+    }
+    // if user color is black
+    else if (user_color == 'Black')
+    {
+      // init PGN header
+      pgn_header = '[White "BBC 1.2"]\n[Black "' + user_name + '"]\n\n';
+      
+      // init PGN filename
+      $('#download_link').attr('download', 'BBC_vs_' + user_name + '_' + date.toString().replace(/\s/g, "_") + '.pgn');
+    }
+    // otherwise it's error
+    else
+    {
+      alert('Color is illegal, please type "White" or "Black"');
+      return; 
+    }
+    
+    // init download link
+    $('#download_link').attr('href', window.URL.createObjectURL(
+      new Blob([pgn_header + game.pgn()], {type: 'text'})
+    ));
+    
+    // mimic download link click
+    $('#download_link')[0].click();
+  });
+
+  // GUI board & game state variables
+  var board = null;
+  var game = new Chess();
+  var $status = $('#status');
+  var $fen = $('#fen');
+  var $pgn = $('#pgn');
+  var $score = $('#score');
+  var $depth = $('#depth');
+  var $time = $('#time');
+  var $nodes = $('#nodes');
+  var $knps = $('#knps')
+
+  // on picking up a piece
   function onDragStart (source, piece, position, orientation) {
     // do not pick up pieces if the game is over
     if (game.game_over()) return false
@@ -223,6 +348,7 @@
     }
   }
 
+  // on dropping piece
   function onDrop (source, target) {
     // see if the move is legal
     var move = game.move({
@@ -234,7 +360,11 @@
     // illegal move
     if (move === null) return 'snapback'
 
-    updateStatus()
+    // make computer move
+    make_move();
+    
+    // update game status
+    updateStatus();
   }
 
   // update the board position after the piece snap
@@ -243,6 +373,7 @@
     board.position(game.fen())
   }
 
+  // update game status
   function updateStatus () {
     var status = ''
 
@@ -271,11 +402,13 @@
       }
     }
 
+    // update DOM elements
     $status.html(status)
-    $fen.html(game.fen())
+    $fen.val(game.fen())
     $pgn.html(game.pgn())
   }
 
+  // chess board configuration
   var config = {
     draggable: true,
     position: 'start',
@@ -283,7 +416,15 @@
     onDrop: onDrop,
     onSnapEnd: onSnapEnd
   }
+  
+  // create chess board widget instance
   board = Chessboard('chess_board', config)
+  
+  // prevent scrolling on touch devices
+  $('#chess_board').on('scroll touchmove touchend touchstart contextmenu', function(e) {
+    e.preventDefault();
+  });
 
-  updateStatus()
+  // update game status
+  updateStatus();
 </script>
