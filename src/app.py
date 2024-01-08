@@ -17,6 +17,7 @@ from flask_pymongo import PyMongo
 from datetime import datetime
 import json
 import asyncio
+import re
 
 
 engine = chess.engine.SimpleEngine.popen_uci('./engine/slice.exe')
@@ -30,61 +31,57 @@ def root():
 # make move API
 @app.route('/make_move', methods=['POST'])
 def make_move():
-    
     # extract FEN string from HTTP POST request body
     fen = request.form.get('fen')
 
     # init python chess board instance
+    analysboard = chess.Board(fen)
     board = chess.Board(fen)
-    # extract fixed depth value
-    fixed_depth = request.form.get('fixed_depth')
     # search for best move
     
 
-    result = engine.analyse(board, chess.engine.Limit(depth=int(fixed_depth)))
+    result = engine.play(board, chess.engine.Limit(depth=6))
+
+
+    
+
+    info = engine.analyse(analysboard, chess.engine.Limit(depth=6))
+    # update internal python chess board state
     board.push(result.move)
     
+    # extract FEN from current board state
+    fen = board.fen()
+    old_score = str(info['score'])
     
 
-
-    # update internal python chess board state
+    score = re.sub('[PovScore(Cp(), BLACK) WHITE]', '', old_score)
     
-    # get best score
+    print(score)
     try:
-        # extract best move from PV
-        best_move = result['pv'][0]
+            score = -int(str(score)) / 100
         
-        
-        
-        # get best score
-        try:
-            score = -int(str(result['score'])) / 100
-        
-        except:
-            score = str(result['score'])
-            
-            # inverse score
-            if '+' in score:
+    except:
+        score = str(score) + 'Centi-Pawns'
+        if '+' in score:
                 score = score.replace('+', '-')
             
-            elif '-' in score:
-                score = score.replace('-', '+')
-          
-        return {
-            'fen': board.fen(),
-            'best_move': str(best_move),
-            'score': score,
-            'depth': result['depth'],
-            'pv': ' '.join([str(move) for move in result['pv']]),
-            'nodes': result['nodes'],
-            'time': result['time']
-        }
+        elif '-' in score:
+            score = score.replace('-', '+')
+         
+
     
-    except:
-        return {
-            'fen': board.fen(),
-            'score': '#+1'
-        }
+    return {
+        'fen': fen,
+        'best_move': str(result.move),
+        'score': score,
+
+        'nodes': info['nodes'],
+        'time': info['time']
+    }
+    
+@app.route('/play')
+def analytics():
+    return render_template('Play.html')
 
 # main driver
 if __name__ == '__main__':
