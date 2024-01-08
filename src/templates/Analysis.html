@@ -234,6 +234,16 @@
     // illegal move
     if (move === null) return 'snapback'
 
+    // make HTTP POST request to make move API
+    $.post('/make_move', {'fen': game.fen()}, function(data) {
+      
+      // load fen into the current board state
+      game.load(data.fen);
+      
+      // update board position
+      board.position(game.fen());
+    });
+
     updateStatus()
   }
 
