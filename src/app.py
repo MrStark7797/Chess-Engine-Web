@@ -39,8 +39,9 @@ def make_move():
     board = chess.Board(fen)
     # search for best move
     
-
-    result = engine.play(board, chess.engine.Limit(depth=6))
+    fixed_depth = request.form.get('fixed_depth')
+    
+    result = engine.play(board, chess.engine.Limit(depth=fixed_depth))
 
 
     
@@ -53,10 +54,10 @@ def make_move():
     fen = board.fen()
     old_score = str(info['score'])
     
-
+    
     score = re.sub('[PovScore(Cp(), BLACK) WHITE]', '', old_score)
     
-    print(score)
+    
     try:
             score = -int(str(score)) / 100
         
