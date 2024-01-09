@@ -1,0 +1,23 @@
+[Event "Live Chess"]
+[Site "Chess.com"]
+[Date "2024.01.09"]
+[Round "?"]
+[White "WillStarkie"]
+[Black "Veggurinn"]
+[Result "1-0"]
+[ECO "C50"]
+[WhiteElo "957"]
+[BlackElo "900"]
+[TimeControl "180"]
+[EndTime "4:50:47 PST"]
+[Termination "WillStarkie won by checkmate"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. Nc3 h6 5. O-O d6 6. d3 Bg4 7. h3 Bh5 8. Re1
+Nf6 9. Be3 Bb4 10. a3 Bxc3 11. bxc3 Nh7 12. d4 exd4 13. cxd4 Ng5 14. Bxg5 Qxg5
+15. Nxg5 Bxd1 16. Nxf7 O-O 17. Rexd1 Rxf7 18. Bxf7+ Kxf7 19. d5 Na5 20. a4 Ke7
+21. Re1 Kd7 22. Rac1 Nc4 23. c3 Re8 24. f3 Nd2 25. c4 Nb3 26. Rb1 Nc5 27. a5 a6
+28. Kf2 g5 29. Kg3 h5 30. h4 Rg8 31. hxg5 Rxg5+ 32. Kf2 h4 33. Rh1 Rh5 34. g4
+Rh8 35. Ke3 Ke7 36. f4 Kf6 37. g5+ Kg6 38. Rbg1 Nb3 39. f5+ Kg7 40. f6+ Kg6 41.
+Kf4 Nxa5 42. Rc1 Nb3 43. Rc3 Nd4 44. Rch3 Ne2+ 45. Kg4 Nd4 46. Rxh4 Rxh4+ 47.
+Rxh4 Ne2 48. Rh6+ Kf7 49. Kf5 Ng3+ 50. Kg4 Nxe4 51. Rh7+ Kg6 52. Rh6+ Kf7 53.
+Rh7+ Kg6 54. Rg7# 1-0

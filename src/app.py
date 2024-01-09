@@ -18,9 +18,18 @@ from datetime import datetime
 import json
 import asyncio
 import re
+import werkzeug
+import os
 
 
 engine = chess.engine.SimpleEngine.popen_uci('./engine/slice.exe')
+png_path = "static/pngstore/"
+scoreArr = []
+moveArr = []
+best_scoreArr = []
+best_moveArr = []
+
+ALLOWED_EXTENSIONS = {'pgn'}
 # create web app instance
 app = Flask(__name__)
 
@@ -84,6 +93,110 @@ def make_move():
 def analytics():
     return render_template('Play.html')
 
+
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+@app.route('/upload_PGN', methods=['POST'])
+def upload_PGN():
+    # gets file
+    if 'file' in request.files:
+        file = request.files['file']
+        # checks if file is pgn
+        if file and allowed_file(file.filename):
+            filename = werkzeug.utils.secure_filename(file.filename)
+            file.save(os.path.join(png_path, file.filename))  
+            pgn = open(os.path.join(png_path, file.filename))
+            
+            # gets pgn
+            gamePGN = chess.pgn.read_game(pgn)
+        else:
+            return 'Not Valid PGN'
+    else:
+        return 'No File'
+    print("Pass: File Save and get PGN \n")
+    # init python chess board instance
+    board = gamePGN.board()
+    for move in gamePGN.mainline_moves():
+        # push move
+        board.push(move)
+        # init python chess board instance with best move for analysis
+        analysboard = board
+
+        print("Pass: push move \nMove:", len(moveArr), "\n")
+        
+        if (board.is_game_over() == True):
+            print("Game Over")
+            break
+        print('Pass: Check\n')
+        fixed_depth = request.form.get('fixed_depth')
+        info = engine.analyse(analysboard, chess.engine.Limit(depth=6))
+
+        print("Score Got\n")
+        # remove extras
+        old_score = str(info['score'])    
+        score = re.sub('[PovScore(Cp(), BLACK) WHITE]', '', old_score)
+
+        # update arrays
+        scoreArr.append(score)
+        moveArr.append(move)
+        print("Score added\n")
+        # pop to check best move
+        board.pop()
+        if (len(moveArr) != 1):
+        
+            analysboard = board
+            playboard = board
+        else:
+            analysboard = chess.Board()
+            playboard = chess.Board()
+            check = 1
+        
+        print("Boards Set\n")
+        # init python chess board instance with best move
+        
+        # gets best move and best score
+        best_result = engine.play(playboard, chess.engine.Limit(depth=6))
+        best_info = engine.analyse(analysboard, chess.engine.Limit(depth=6))
+        print("Best Score Got\n")
+        # remove extras
+        best_old_score = str(best_info['score'])    
+        best_score = re.sub('[PovScore(Cp(), BLACK) WHITE]', '', best_old_score)
+
+        # update arrays
+        best_scoreArr.append(best_score)
+        best_moveArr.append(str(best_result.move))
+        print("Best Score added\n")
+        # add played move back on to board so next move can be analysed
+        
+        board.push(move)
+
+    print("Score:\n")
+    for x in scoreArr:
+         print(x)
+    print("Move:\n")
+    for x in moveArr:
+         print(x)
+    print("Best Score:\n")
+    for x in best_scoreArr:
+         print(x)
+    print("Best Move:\n")
+    for x in best_moveArr:
+         print(x)
+    return 'finsished'
+
+
+        
+    
+
+    
+    
+
+    
+
+    
+    
 # main driver
 if __name__ == '__main__':
     # start HTTP server
