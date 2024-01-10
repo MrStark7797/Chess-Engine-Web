@@ -29,6 +29,7 @@ moveArr = []
 best_scoreArr = []
 best_moveArr = []
 
+
 ALLOWED_EXTENSIONS = {'pgn'}
 # create web app instance
 app = Flask(__name__)
@@ -127,6 +128,48 @@ def upload_PGN():
         print("Pass: push move \nMove:", len(moveArr), "\n")
         
         if (board.is_game_over() == True):
+            outcome = board.outcome()
+            if(outcome.result() == '1-0'):
+                scoreArr.append(300) 
+                best_moveArr.append(move)
+                best_scoreArr.append(300) 
+            elif (outcome.result() == '0-1'):
+                scoreArr.append(-300)
+                best_moveArr.append(move)
+                best_scoreArr.append(-300) 
+
+            else:
+                scoreArr.append(0)
+                board.pop()
+                if (len(moveArr) != 1):
+        
+                    analysboard = board
+                    playboard = board
+                else:
+                    analysboard = chess.Board()
+                    playboard = chess.Board()
+                    check = 1
+        
+                print("Boards Set\n")
+                # init python chess board instance with best move
+        
+                # gets best move and best score
+                best_result = engine.play(playboard, chess.engine.Limit(depth=6))
+                best_info = engine.analyse(analysboard, chess.engine.Limit(depth=6))
+                print("Best Score Got\n")
+                # remove extras
+                best_old_score = str(best_info['score'])    
+                best_score = re.sub('[PovScore(Cp(), BLACK) WHITE]', '', best_old_score)
+                best_score = int(str(best_score)) / 100
+
+                # update arrays
+                best_scoreArr.append(best_score)
+                best_moveArr.append(str(best_result.move))
+                print("Best Score added\n")
+                # add played move back on to board so next move can be analysed
+        
+                board.push(move)            
+            moveArr.append(move)
             print("Game Over")
             break
         print('Pass: Check\n')
@@ -137,6 +180,7 @@ def upload_PGN():
         # remove extras
         old_score = str(info['score'])    
         score = re.sub('[PovScore(Cp(), BLACK) WHITE]', '', old_score)
+        score = int(str(score)) / 100
 
         # update arrays
         scoreArr.append(score)
@@ -163,6 +207,7 @@ def upload_PGN():
         # remove extras
         best_old_score = str(best_info['score'])    
         best_score = re.sub('[PovScore(Cp(), BLACK) WHITE]', '', best_old_score)
+        best_score = -int(str(best_score)) / 100
 
         # update arrays
         best_scoreArr.append(best_score)
@@ -184,15 +229,82 @@ def upload_PGN():
     print("Best Move:\n")
     for x in best_moveArr:
          print(x)
-    return 'finsished'
+    return ''
 
 
         
     
+@app.route('/next_move', methods=['POST'])
+def next_move():
+    fen = request.form.get('fen')
+    board = chess.Board(fen)
+    movePly = board.ply()
+    if(movePly > len(scoreArr)):
+         return ''
+    
+    score = scoreArr[movePly]
+    move = moveArr[movePly]
+    best_score = best_scoreArr[movePly]
+    best_move = best_moveArr[movePly]
+    print("Score:", score,"\n")
 
+    print("Move:", move,"\n")
+
+    print("Best Score:", best_score,"\n")
+  
+    print("Best Move:", best_move,"\n")
     
     
+    board.push(move)
+    fen = board.fen()
+    movePly =+ 1
+    return {
+        'fen': fen,
+        'move': str(move),
+        'score': score,
+        'best_move': str(best_move),
+        'best_score': best_score,  
+    }
+    
+@app.route('/prev_move', methods=['POST'])
+def prev_move():
+    fen = request.form.get('fen')
+    board = chess.Board(fen)
+    movePly = board.ply()
+    board.reset()
+    
+    if(movePly > len(scoreArr) + 1):
+         return ''
+    nPly = 0
+    while nPly < movePly - 1:
+        board.push(moveArr[nPly])
+        nPly += 1
+        print(board.fen())
+    
+    
+    
+    score = scoreArr[movePly - 2]
+    move = moveArr[movePly - 2]
+    best_score = best_scoreArr[movePly - 2]
+    best_move = best_moveArr[movePly - 2]
+    print("Score:", score,"\n")
 
+    print("Move:", move,"\n")
+
+    print("Best Score:", best_score,"\n")
+  
+    print("Best Move:", best_move,"\n")
+    
+    
+    fen = board.fen()
+    movePly =- 1
+    return {
+        'fen': fen,
+        'move': str(move),
+        'score': score,
+        'best_move': str(best_move),
+        'best_score': best_score,  
+    }
     
 
     

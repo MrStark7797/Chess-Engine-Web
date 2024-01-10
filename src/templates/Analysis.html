@@ -120,8 +120,8 @@
                         <!-- -buttons -->
                         <div class="btn-group">
                           <button id="new_game" class="btn btn-outline-secondary">New game</button>
-                          <button id="make_move" class="btn btn-outline-secondary">Make move</button>
-                          <button id="take_back" class="btn btn-outline-secondary">Take back</button>
+                          <button id="next_move" class="btn btn-outline-secondary">Next move</button>
+                          <button id="prev_move" class="btn btn-outline-secondary">Prev move</button>
                           <button id="flip_board" class="btn btn-outline-secondary">Flip board</button>
                         </div>
     
@@ -146,25 +146,26 @@
                       <table class="table text-center mt-4">
                         <thead>
                           <tr>
+                            <th>Move</th>
                             <th>Score</th>
-                            <th>Time</th>
-                            <th>Nodes</th>
-                            <th>Knps</th>
+                            <th>Best Move</th>
+                            <th>Best Score</th>
                           </tr>
                         </thead>
                         <tbody>
                           <tr>
+                            <td><i id="move" class="text-danger"></i></td>
                             <td><strong id="score" class="text-danger"></strong></td>
-                            <td id="time"></td>
-                            <td id="nodes"></td>
-                            <td id="knps"></td>
+                            <td><i id="best_move" class="text-danger"></i></td>
+                            <td><i id="best_score" class="text-danger"></i></td>
+
                           <tr>
                         </tbody>
                       </table>
                       <div class="mt-2"><strong>PGN:</strong></div>
                       <form class='mt-2' action = "/upload_PGN" method = "POST" enctype = "multipart/form-data">
-                        <input type = "file" name = "file" />
-                        <input type = "submit"/>
+                        <input class="btn btn-outline-secondary" type = "file" name = "file" />
+                        <input  class="btn btn-outline-secondary" type = "submit"/>
                       </form>
                       
                       <hr>
@@ -206,7 +207,8 @@
     // make HTTP POST request to make move API
     $.post('/make_move', {
       'fen': game.fen(),
-      'fixed_depth': $('#fixed_depth option:selected').val()
+      'fixed_depth': $('#fixed_depth option:selected').val(),
+      'moveNum': nmoves.length
     }, function(data) {
       // load fen into the current board state
       game.move(data.best_move, { sloppy: true })
@@ -245,6 +247,105 @@
       updateStatus();
     });
   }
+  function next_move() {
+    // make HTTP POST request to make move API
+    $.post('/next_move', {
+      'fen': game.fen(),
+      'fixed_depth': $('#fixed_depth option:selected').val()
+    }, function(data) {
+      console.log(data.fen)
+      console.log(data.move);
+      console.log(data.score);
+      console.log(data.best_move);
+      console.log(data.best_score);
+      // load fen into the current board state
+      game.load(data.fen);
+      console.log(game.fen());
+      // update board position
+      board.position(game.fen());
+      console.log(board.fen());
+
+      // update game info
+      $('#score').text(data.score);
+      $('#move').text(data.move);
+      $('#best_move').text(data.best_move);
+      $('#best_score').text(data.best_score);
+
+      //update score graph
+      nmoves[nmoves.length] = nmoves.length;
+      gamescores[gamescores.length] = data.score;
+      Plotly.redraw('myPlot')
+
+      //update score bar
+      slider = document.getElementById("ScoreSlider");
+      if (score >= -5 && score <=5){
+        width = ((score) * 5) + 50;
+        slider.style.width = width + "%";
+        
+      } else if(score >= 300 && score < -5){
+        width = (((score) + 5) * 0.0847457627118644 ) + 25;
+        slider.style.width = width + "%";
+      } else{
+        width = (((score) - 5) * 0.0847457627118644 ) + 75;
+        slider.style.width = width + "%";
+      }
+      console.log(width);
+
+
+      // update game status
+      updateStatus();
+    });
+  }
+  function prev_move() {
+    // make HTTP POST request to make move API
+    $.post('/prev_move', {
+      'fen': game.fen(),
+      'fixed_depth': $('#fixed_depth option:selected').val()
+    }, function(data) {
+      console.log(data.fen)
+      console.log(data.move);
+      console.log(data.score);
+      console.log(data.best_move);
+      console.log(data.best_score);
+      // load fen into the current board state
+      game.load(data.fen);
+      console.log(game.fen());
+      // update board position
+      board.position(game.fen());
+      console.log(board.fen());
+
+      // update game info
+      $('#score').text(data.score);
+      $('#move').text(data.move);
+      $('#best_move').text(data.best_move);
+      $('#best_score').text(data.best_score);
+
+      //update score graph
+      nmoves[nmoves.length] = nmoves.length;
+      gamescores[gamescores.length] = data.score;
+      Plotly.redraw('myPlot')
+
+      //update score bar
+      slider = document.getElementById("ScoreSlider");
+      if (score >= -5 && score <=5){
+        width = ((score) * 5) + 50;
+        slider.style.width = width + "%";
+        
+      } else if(score >= 300 && score < -5){
+        width = (((score) + 5) * 0.0847457627118644 ) + 25;
+        slider.style.width = width + "%";
+      } else{
+        width = (((score) - 5) * 0.0847457627118644 ) + 75;
+        slider.style.width = width + "%";
+      }
+      console.log(width);
+
+
+      // update game status
+      updateStatus();
+    });
+  }
+
 
   // handle new game button click
   $('#new_game').on('click', function() {
@@ -260,25 +361,15 @@
   });
   
   // handle make move button click
-  $('#make_move').on('click', function() {
+  $('#next_move').on('click', function() {
     // make computer move
-    make_move();
+    next_move();
   });
   
   // handle take back button click
-  $('#take_back').on('click', function() {
+  $('#prev_move').on('click', function() {
     // take move back
-    game.undo();
-    game.undo();
-    
-    // update board position
-    board.position(game.fen());
-    //redraw plotly
-    nmoves.pop();
-    gamescores.pop();
-    Plotly.redraw('myPlot')
-    // update game status
-    updateStatus();
+    prev_move()
   });
   
   // handle flip board button click
@@ -368,7 +459,7 @@
     // update DOM elements
     $status.html(status)
     $fen.val(game.fen())
-    $pgn.html(game.pgn())
+    
   }
 
   // chess board configuration
