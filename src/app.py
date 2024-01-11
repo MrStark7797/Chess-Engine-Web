@@ -160,8 +160,12 @@ def upload_PGN():
                 # remove extras
                 best_old_score = str(best_info['score'])    
                 best_score = re.sub('[PovScore(Cp(), BLACK) WHITE]', '', best_old_score)
-                best_score = int(str(best_score)) / 100
+                if (chess.Color() == True):
 
+                    best_score = int(str(best_score)) / 100
+                else:
+                    best_score = -int(str(best_score)) / 100
+                    
                 # update arrays
                 best_scoreArr.append(best_score)
                 best_moveArr.append(str(best_result.move))
@@ -180,7 +184,12 @@ def upload_PGN():
         # remove extras
         old_score = str(info['score'])    
         score = re.sub('[PovScore(Cp(), BLACK) WHITE]', '', old_score)
-        score = int(str(score)) / 100
+        if (chess.Color() == True):
+
+            score = int(str(score)) / 100
+        else:
+            best_score = -int(str(score)) / 100
+                  
 
         # update arrays
         scoreArr.append(score)
@@ -207,7 +216,12 @@ def upload_PGN():
         # remove extras
         best_old_score = str(best_info['score'])    
         best_score = re.sub('[PovScore(Cp(), BLACK) WHITE]', '', best_old_score)
-        best_score = -int(str(best_score)) / 100
+        if (chess.Color() == True):
+
+            best_score = int(str(best_score)) / 100
+        else:
+            best_score = -int(str(best_score)) / 100
+                  
 
         # update arrays
         best_scoreArr.append(best_score)

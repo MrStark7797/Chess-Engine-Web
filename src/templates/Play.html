@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang = "en">
     <head>
@@ -103,24 +104,24 @@
     
                        
                         <!-- strength controls -->
-                         
+                          
                         <div class="input-group mb-3">
-                          <!-- 
+                          
+                            <!--
                           <select id="move_time" class="form-control mr-2">
                             
                             <option value="8">8 sec</option>
                             <option value="9">9 sec</option>
                             <option value="10">10 sec</option>
-                          </select>
-                          -->
+                          </select> -->
                           <select id="fixed_depth" class="form-control ml-2">
                             
                             <option value="6">6 ply Fastest</option>
                             <option value="7">7 ply</option>
-                            <option value="8">8 ply Strongest</option>  
+                            <option value="8">8 ply Slowest</option>
                             
                           </select>
-                        </div> 
+                        </div>
     
                         <!-- -buttons -->
                         <div class="btn-group">
@@ -203,7 +204,11 @@
   // make computer move
   function make_move() {
     // make HTTP POST request to make move API
-    $.post('/make_move', {'fen': game.fen()}, function(data) {
+    $.post('/make_move', {
+      'fen': game.fen(),
+      'fixed_depth': $('#fixed_depth option:selected').val(),
+      'moveNum': nmoves.length
+    }, function(data) {
       // load fen into the current board state
       game.move(data.best_move, { sloppy: true })
       
@@ -234,6 +239,7 @@
         width = ((int(score) - 5) * 0.0847457627118644 ) + 75;
         slider.style.width = width + "%";
       }
+      console.log(width);
 
 
       // update game status
@@ -245,11 +251,7 @@
   $('#new_game').on('click', function() {
     // reset board state
     game.reset();
-    for(i = nmoves.length - 1; i > 0; i--){
-      nmoves.pop();
-      gamescores.pop();
-    }
-    Plotly.redraw('myPlot')
+    
     // set initial board position
     board.position('start');
   });
@@ -344,7 +346,7 @@
     if (game.in_checkmate()) {
       status = 'Game over, ' + moveColor + ' is in checkmate.'
     }
- 
+
     // draw?
     else if (game.in_draw()) {
       status = 'Game over, drawn position'
