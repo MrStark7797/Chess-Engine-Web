@@ -4,6 +4,6 @@
 [Round "?"]
 [White "?"]
 [Black "?"]
-[Result "1-0"]
+[Result "*"]
 
-1. e4 e5 2. Bc4 Nc6 3. Qf3 d6 4. Qxf7# 1-0
+1. e4 e5 2. Ba6 bxa6 3. Qg4 d5 4. exd5 Bxg4 *
