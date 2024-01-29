@@ -341,3 +341,26 @@ body {
     height: 100%;
     background-color: black;
 }
+.menu{
+    display: none;
+    position: fixed;
+    left: 25%;
+    top: 25%;
+    width: 50%; 
+    height: 50%;
+    padding-top: 60px;
+    background-color: #080e1d;
+    border: 1px solid #F2E8CF;
+}
+.menu-content {
+    
+    margin: 5px auto;
+    
+    width: 80%;
+  }
+.settingsclose{
+    position: absolute;
+    right:25px;
+    top: 0;
+    color: #F2E8CF;
+}

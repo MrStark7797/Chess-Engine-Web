@@ -117,10 +117,13 @@
                           <button id="next_move" class="btn btn-outline-secondary">Next move</button>
                           <button id="prev_move" class="btn btn-outline-secondary">Prev move</button>
                           <button id="flip_board" class="btn btn-outline-secondary">Flip board</button>
+                          <button id="settings" class="btn btn-outline-secondary" onclick="document.getElementById('settingsmenu').style.display='block'"><img src="./static/img/settingsgear.png" width="32" height="32"></button>
                         </div>
-    
+                        
                       </div>
+                      
                     </div>
+                    
                     <div class="col ml-4">
                       <!-- engine info -->
                       <div class="col"><img src="static/img/LogoVector.svg" width="64" height="64" ></img></div>
@@ -132,7 +135,7 @@
                         </p>
                       </div>
                       <hr>
-    
+                      
                       <!-- info -->
                       
     
@@ -174,6 +177,17 @@
             </div>
           </div>
         </div>
+        <div id="settingsmenu" class="menu">
+          
+          <button class="close" onclick="document.getElementById('settingsmenu').style.display='none'">X</button>
+          <div class="menu-content">
+            <h1>Size</h1>
+            <button id="sizedown" class="hero-button">-</button>
+            <button id="sizeup" class="hero-button">+</button>
+          </div>
+          
+          
+        </div>
         
     </body>
     
@@ -196,6 +210,22 @@
 
   // Display using Plotly
   Plotly.newPlot("myPlot", data, layout);
+  $('#sizeup').on('click', function() {
+    let width = document.getElementById("chess_board").offsetWidth
+    console.log(width);
+    width = width + 50;
+    
+    $("#chess_board").width(width);
+    board.resize()
+
+  });
+  $('#sizedown').on('click', function() {
+    let width = document.getElementById("chess_board").offsetWidth
+    width = width - 50;
+    $("#chess_board").width(width);
+    board.resize()
+
+  });
   // make computer move
   function make_move() {
     // make HTTP POST request to make move API
