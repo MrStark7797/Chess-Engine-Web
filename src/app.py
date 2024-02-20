@@ -117,8 +117,10 @@ def upload_PGN():
     else:
         return 'No File'
     print("Pass: File Save and get PGN \n")
+    fixed_depth = request.form.get("fixed_depth")
     # init python chess board instance
     board = gamePGN.board()
+    print(fixed_depth)
     for move in gamePGN.mainline_moves():
         # push move
         board.push(move)

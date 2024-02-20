@@ -104,7 +104,7 @@
                           
                         <div class="input-group mb-3">
 
-                          <select id="fixed_depth" class="form-control ml-2">
+                          <select id="fixed_depth" class="form-control ml-2" form="upload">
                             <option value="6">6 ply Fastest</option>
                             <option value="7">7 ply</option>
                             <option value="8">8 ply Strongest</option>  
@@ -160,9 +160,10 @@
                         </tbody>
                       </table>
                       <div class="mt-2"><strong>PGN:</strong></div>
-                      <form class='mt-2' action = "/upload_PGN" method = "POST" enctype = "multipart/form-data">
+                      <form id="upload" class='mt-2' action = "/upload_PGN" method = "POST" enctype = "multipart/form-data">
                         <input class="btn btn-outline-secondary" type = "file" name = "file" />
                         <input  class="btn btn-outline-secondary" type = "submit"/>
+                        
                       </form>
                       
                       <hr>
