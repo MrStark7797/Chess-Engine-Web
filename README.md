@@ -6,7 +6,7 @@ For A level NEA
 Plans on removing Maksym Korzh work for a personal writen UCI code using node.js
 # Thanks
 
-2021 Maksym Korzh - Python and slapping the chess stuff together
+2021 Maksym Korzh - Python API's for the play page
 
 2019 Chris Oakman - Chessboard.js & chessboard-1.0.0.min.css
 
